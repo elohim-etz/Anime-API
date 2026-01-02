@@ -10,8 +10,9 @@ const getRecentReleases: RequestHandler = async (req, res) => {
     const data = await scrapeRecentPage(page);
     res.status(200).json(data);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    ////////////////////////////////////
+    console.log(err); // for TESTING//
+    ////////////////////////////////////
   }
 };
 

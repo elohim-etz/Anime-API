@@ -1,22 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { URL_fn } from "../../utils/kickassanime/constants";
+import { mapStatus } from "../../utils/kickassanime/helpers";
 import { headers } from "../../config/headers";
 import createHttpError, { HttpError } from "http-errors";
 import { ScrapedSearchPage } from "../../types/kickassanime/search";
 import { SearchedAnime } from "../../types/kickassanime/anime";
-
-const mapStatus = (status: string): string => {
-  switch (status) {
-    case "finished_airing":
-      return "Completed";
-    case "currently_airing":
-      return "Ongoing";
-    case "not_yet_aired":
-      return "Not Yet Aired";
-    default:
-      return "Unknown";
-  }
-};
 
 export const scrapeSearchPage = async (
   query: string,
