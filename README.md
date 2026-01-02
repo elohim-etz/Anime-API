@@ -32,6 +32,10 @@ Check it out at <a href="https://api-anime-rouge.vercel.app"><kbd>api-anime-roug
 | `/gogoanime/completed?page=${pageNo}`                    | 1 day (3600 * 24)     |
 | `/gogoanime/anime-movies?page=${pageNo}`                 | 1 day (3600 * 24)     |
 | `/gogoanime/top-airing?page=${pageNo}`                   | 1 day (3600 * 24)     |
+| `/kickassanime/search?keyword=${query}&page=${page}`     | 1 hour (3600)         |
+| `/kickassanime/anime/:id`                               | 1 day (3600 * 24)     |
+| `/kickassanime/recent?page=${page}`                     | 1 day (3600 * 24)     |
+| `/kickassanime/servers/*`                               | 1 day (3600 * 24)     |
 
 
 ### Deploy this project to Vercel
@@ -47,7 +51,7 @@ Anime Websites  |    STATUS
 --------------  | -------------
 aniwatch        | <b>DONE</b>
 gogoanime       | <b>WORKING ON IT</b>
-kickassanime    | <b>IN FUTURE</b>
+kickassanime    | <b>DONE</b>
 
 >[!NOTE]
 >More Websites Will be Added in Future
@@ -56,6 +60,7 @@ kickassanime    | <b>IN FUTURE</b>
 
 - [AniWatch](#aniwatch)
 - [GogoAnime](#gogoanime)
+- [KickAssAnime](#kickassanime)
 
 ##  <span id="aniwatch">AniWatch</span>
 
@@ -1129,6 +1134,198 @@ console.log(data);
     "other_name": string,
     "episodes": number
   }
+}
+```
+
+<break>
+
+##  <span id="kickassanime">KickAssAnime</span>
+
+### `GET` KickAssAnime Search
+
+#### Endpoint
+
+```sh
+https://api-anime-rouge.vercel.app/kickassanime/search?keyword=${query}&page=${page}
+```
+
+#### Query Parameters
+
+| Parameter |  Type  |             Description              | Required? | Default |
+| :-------: | :----: | :----------------------------------: | :-------: | :-----: |
+|  `keyword`| string |         Search Query for Anime       |    YES    |  -----  |
+|  `page`   | number |        Page No. of Search Page       |    NO     |    1    |
+
+#### Request sample
+
+```javascript
+const res = await fetch(
+  "https://api-anime-rouge.vercel.app/kickassanime/search?keyword=naruto&page=1"
+);
+const data = await res.json();
+console.log(data);
+```
+
+#### Response Schema
+
+```typescript
+{
+  "animes": [
+    {
+      "id": string,
+      "title": string,
+      "url": string,
+      "img": string,
+      "releaseDate": string,
+      "subOrDub": "sub" | "dub",
+      "status": string,
+      "otherName": string,
+      "totalEpisodes": number
+    },
+    {...}
+  ],
+  "currentPage": number,
+  "hasNextPage": boolean,
+  "totalPages": number
+}
+```
+
+### `GET` KickAssAnime Anime Info
+
+#### Endpoint
+
+```sh
+https://api-anime-rouge.vercel.app/kickassanime/anime/:id
+```
+
+#### Query Parameters
+
+| Parameter |  Type  |             Description              | Required? | Default |
+| :-------: | :----: | :----------------------------------: | :-------: | :-----: |
+|   `id`    | string |      The anime slug/id               |    YES    |  -----  |
+
+#### Request sample
+
+```javascript
+const res = await fetch(
+  "https://api-anime-rouge.vercel.app/kickassanime/anime/naruto-f3cf"
+);
+const data = await res.json();
+console.log(data);
+```
+
+#### Response Schema
+
+```typescript
+{
+  "id": string,
+  "title": string,
+  "url": string,
+  "genres": string[],
+  "totalEpisodes": number,
+  "img": string,
+  "cover": string,
+  "description": string,
+  "subOrDub": "sub" | "dub",
+  "type": string,
+  "status": string,
+  "otherName": string,
+  "releaseDate": string,
+  "episodes": [
+    {
+      "id": string,
+      "title": string,
+      "number": number,
+      "img": string,
+      "url": string
+    },
+    {...}
+  ]
+}
+```
+
+### `GET` KickAssAnime Recent Releases
+
+#### Endpoint
+
+```sh
+https://api-anime-rouge.vercel.app/kickassanime/recent?page=${page}
+```
+
+#### Query Parameters
+
+| Parameter |  Type  |             Description              | Required? | Default |
+| :-------: | :----: | :----------------------------------: | :-------: | :-----: |
+|  `page`   | number |        Page No. of Results           |    NO     |    1    |
+
+#### Request sample
+
+```javascript
+const res = await fetch(
+  "https://api-anime-rouge.vercel.app/kickassanime/recent"
+);
+const data = await res.json();
+console.log(data);
+```
+
+#### Response Schema
+
+```typescript
+{
+  "animes": [
+    {
+      "id": string,
+      "title": string,
+      "img": string,
+      "episodeId": string,
+      "episodeNo": number,
+      "subOrDub": "sub" | "dub"
+    },
+    {...}
+  ],
+  "currentPage": number,
+  "hasNextPage": boolean,
+  "totalPages": number
+}
+```
+
+### `GET` KickAssAnime Episode Servers
+
+#### Endpoint
+
+```sh
+https://api-anime-rouge.vercel.app/kickassanime/servers/{animeId}/episode/{episodeId}
+```
+
+#### Query Parameters
+
+| Parameter  |  Type  |             Description              | Required? | Default |
+| :--------: | :----: | :----------------------------------: | :-------: | :-----: |
+| `animeId`  | string |      The anime slug/id               |    YES    |  -----  |
+| `episodeId`| string |      The episode slug/id             |    YES    |  -----  |
+
+#### Request sample
+
+```javascript
+const res = await fetch(
+  "https://api-anime-rouge.vercel.app/kickassanime/servers/naruto-f3cf/episode/ep-1-12cd96"
+);
+const data = await res.json();
+console.log(data);
+```
+
+#### Response Schema
+
+```typescript
+{
+  "episodeId": string,
+  "servers": [
+    {
+      "name": string,
+      "url": string
+    },
+    {...}
+  ]
 }
 ```
 

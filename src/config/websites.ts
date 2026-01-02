@@ -25,4 +25,7 @@ export const websites_collection: Websites = {
   GogoAnime: {
     BASE: "https://ww24.gogoanimes.fi",
   },
+  KickAssAnime: {
+    BASE: "https://kickass-anime.ro",
+  },
 };
