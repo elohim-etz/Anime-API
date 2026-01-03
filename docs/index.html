@@ -213,8 +213,8 @@
         requests without leaving GitHub Pages.
       </p>
       <div class="cta-row">
-        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noreferrer noopener">View live API</a>
-        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noreferrer noopener"
+        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer">View live API</a>
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer"
           >Repository</a
         >
       </div>
@@ -362,11 +362,11 @@
         resultEl.textContent = "Loading…";
         const endpoint = endpointSelect.value;
         const page = pageInput.value.trim();
-        const pageValue = page || "1";
-        if (page && !/^[0-9]+$/.test(pageValue)) {
+        if (page && !/^[0-9]+$/.test(page)) {
           resultEl.textContent = "Please enter a numeric page.";
           return;
         }
+        const pageValue = page || "1";
 
         let url = "";
         if (endpoint === "aniwatch") {
