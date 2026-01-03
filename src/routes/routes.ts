@@ -1,5 +1,6 @@
 import aniwatch_router from "./aniwatch/routes";
 import gogoanime_router from "./gogoanime/routes";
+import kickassanime_router from "./kickassanime/routes";
 import { getRoot } from "../lib/getRoot";
 import { Router, type IRouter } from "express";
 
@@ -21,5 +22,8 @@ router.use("/zoro", aniwatch_router);
 // gogoanime, anitaku
 router.use("/gogoanime", gogoanime_router);
 router.use("/anitaku", gogoanime_router);
+
+// kickassanime
+router.use("/kickassanime", kickassanime_router);
 
 export { router };
