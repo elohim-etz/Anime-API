@@ -10,8 +10,8 @@
         --panel: #11131a;
         --accent: #8b5cf6;
         --accent-2: #22d3ee;
-        --text: #e5e7eb;
-        --muted: #9ca3af;
+        --text: #f3f4f6;
+        --muted: #cbd5e1;
         --border: #1f2937;
         --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
       }
@@ -213,8 +213,8 @@
         requests without leaving GitHub Pages.
       </p>
       <div class="cta-row">
-        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noreferrer">View live API</a>
-        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noreferrer"
+        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noreferrer noopener">View live API</a>
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noreferrer noopener"
           >Repository</a
         >
       </div>
@@ -288,7 +288,7 @@
               <input id="page" name="page" placeholder="1" />
             </div>
           </div>
-          <button class="btn" type="submit">Run request</button>
+          <button class="btn" type="submit" aria-label="Run API request">Run request</button>
         </form>
         <div class="result" id="result">Waiting for your first request…</div>
       </section>
@@ -363,10 +363,18 @@
         const endpoint = endpointSelect.value;
         const page = pageInput.value.trim();
         const pageValue = page || "1";
+        if (page && !/^[0-9]+$/.test(pageValue)) {
+          resultEl.textContent = "Please enter a numeric page.";
+          return;
+        }
 
         let url = "";
         if (endpoint === "aniwatch") {
           const q = queryInput.value.trim() || "one piece";
+          if (q.length > 120) {
+            resultEl.textContent = "Keyword too long (max 120 characters).";
+            return;
+          }
           url = `https://api-anime-rouge.vercel.app/aniwatch/search?keyword=${encodeURIComponent(q)}&page=${encodeURIComponent(pageValue)}`;
         } else if (endpoint === "gogoanime") {
           url = "https://api-anime-rouge.vercel.app/gogoanime/home";
@@ -379,7 +387,8 @@
           const data = await res.json();
           resultEl.textContent = JSON.stringify(data, null, 2);
         } catch (err) {
-          resultEl.textContent = `Request failed: ${err.message}`;
+          console.error(err);
+          resultEl.textContent = "Request failed. Please try again or check the console for details.";
         }
       });
     </script>
