@@ -213,8 +213,8 @@
         requests without leaving GitHub Pages.
       </p>
       <div class="cta-row">
-        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer">View live API</a>
-        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer">Repository</a>
+        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer" aria-label="View live API (opens in new tab)">View live API</a>
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer" aria-label="Repository (opens in new tab)">Repository</a>
       </div>
       <nav>
         <a href="#about">About</a>
@@ -378,11 +378,16 @@
         } else if (endpoint === "gogoanime") {
           url = "https://api-anime-rouge.vercel.app/gogoanime/home";
         } else if (endpoint === "kickassanime") {
-          url = `https://api-anime-rouge.vercel.app/kickassanime/recent${page ? `?page=${encodeURIComponent(pageValue)}` : ""}`;
+          const pageParam = page ? `?page=${encodeURIComponent(pageValue)}` : "";
+          url = `https://api-anime-rouge.vercel.app/kickassanime/recent${pageParam}`;
         }
 
         try {
           const res = await fetch(url);
+          if (!res.ok) {
+            resultEl.textContent = `Request failed with status ${res.status}`;
+            return;
+          }
           const data = await res.json();
           resultEl.textContent = JSON.stringify(data, null, 2);
         } catch (err) {
