@@ -213,8 +213,8 @@
         requests without leaving GitHub Pages.
       </p>
       <div class="cta-row">
-        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer" aria-label="View live API (opens in new tab)">View live API</a>
-        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer" aria-label="Repository (opens in new tab)">Repository</a>
+        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer">View live API</a>
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer">Repository</a>
       </div>
       <nav>
         <a href="#about">About</a>
@@ -361,11 +361,12 @@
         resultEl.textContent = "Loading…";
         const endpoint = endpointSelect.value;
         const page = pageInput.value.trim();
-        if (page && (!/^[0-9]+$/.test(page) || Number(page) < 1)) {
+        const pageNum = parseInt(page, 10);
+        if (page && (Number.isNaN(pageNum) || pageNum < 1)) {
           resultEl.textContent = "Please enter a numeric page of 1 or greater.";
           return;
         }
-        const pageValue = page || "1";
+        const pageValue = page ? String(pageNum) : "1";
 
         let url = "";
         if (endpoint === "aniwatch") {
@@ -378,7 +379,8 @@
         } else if (endpoint === "gogoanime") {
           url = "https://api-anime-rouge.vercel.app/gogoanime/home";
         } else if (endpoint === "kickassanime") {
-          const pageParam = page ? `?page=${encodeURIComponent(pageValue)}` : "";
+          const hasPage = page.length > 0;
+          const pageParam = hasPage ? `?page=${encodeURIComponent(pageValue)}` : "";
           url = `https://api-anime-rouge.vercel.app/kickassanime/recent${pageParam}`;
         }
 
