@@ -342,6 +342,7 @@
 
     <script>
       const MAX_KEYWORD_LENGTH = 120;
+      const CORS_PROXY = "https://long-pine-54cf.christopherhauser1234.workers.dev/?url=";
       const form = document.getElementById("demo-form");
       const resultEl = document.getElementById("result");
       const endpointSelect = document.getElementById("endpoint");
@@ -385,7 +386,8 @@
         }
 
         try {
-          const res = await fetch(url);
+          const proxiedUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+          const res = await fetch(proxiedUrl);
           if (!res.ok) {
             resultEl.textContent = `Request failed with status ${res.status}`;
             return;
