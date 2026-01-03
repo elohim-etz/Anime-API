@@ -214,9 +214,7 @@
       </p>
       <div class="cta-row">
         <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer">View live API</a>
-        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer"
-          >Repository</a
-        >
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer">Repository</a>
       </div>
       <nav>
         <a href="#about">About</a>
@@ -288,7 +286,7 @@
               <input id="page" name="page" placeholder="1" />
             </div>
           </div>
-          <button class="btn" type="submit" aria-label="Run API request">Run request</button>
+          <button class="btn" type="submit">Run request</button>
         </form>
         <div class="result" id="result">Waiting for your first request…</div>
       </section>
@@ -343,6 +341,7 @@
     </p>
 
     <script>
+      const MAX_KEYWORD_LENGTH = 120;
       const form = document.getElementById("demo-form");
       const resultEl = document.getElementById("result");
       const endpointSelect = document.getElementById("endpoint");
@@ -362,8 +361,8 @@
         resultEl.textContent = "Loading…";
         const endpoint = endpointSelect.value;
         const page = pageInput.value.trim();
-        if (page && !/^[0-9]+$/.test(page)) {
-          resultEl.textContent = "Please enter a numeric page.";
+        if (page && (!/^[0-9]+$/.test(page) || Number(page) < 1)) {
+          resultEl.textContent = "Please enter a numeric page of 1 or greater.";
           return;
         }
         const pageValue = page || "1";
@@ -371,8 +370,8 @@
         let url = "";
         if (endpoint === "aniwatch") {
           const q = queryInput.value.trim() || "one piece";
-          if (q.length > 120) {
-            resultEl.textContent = "Keyword too long (max 120 characters).";
+          if (q.length > MAX_KEYWORD_LENGTH) {
+            resultEl.textContent = `Keyword too long (max ${MAX_KEYWORD_LENGTH} characters).`;
             return;
           }
           url = `https://api-anime-rouge.vercel.app/aniwatch/search?keyword=${encodeURIComponent(q)}&page=${encodeURIComponent(pageValue)}`;
