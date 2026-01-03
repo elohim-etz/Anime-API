@@ -306,7 +306,7 @@
           <div class="card">
             <strong>Find servers for an episode</strong>
             <p class="muted small">Get streaming hosts for episode ids.</p>
-            <pre><code>curl "https://api-anime-rouge.vercel.app/aniwatch/servers?id=one-piece-100?ep=84802"</code></pre>
+            <pre><code>curl "https://api-anime-rouge.vercel.app/aniwatch/servers?id=one-piece-100&ep=84802"</code></pre>
           </div>
           <div class="card">
             <strong>KickAssAnime search</strong>
@@ -362,12 +362,12 @@
         resultEl.textContent = "Loading…";
         const endpoint = endpointSelect.value;
         const page = pageInput.value.trim();
-        const pageQuery = page ? `&page=${encodeURIComponent(page)}` : "";
+        const pageValue = page || "1";
 
         let url = "";
         if (endpoint === "aniwatch") {
           const q = queryInput.value.trim() || "one piece";
-          url = `https://api-anime-rouge.vercel.app/aniwatch/search?keyword=${encodeURIComponent(q)}${pageQuery || "&page=1"}`;
+          url = `https://api-anime-rouge.vercel.app/aniwatch/search?keyword=${encodeURIComponent(q)}&page=${encodeURIComponent(pageValue)}`;
         } else if (endpoint === "gogoanime") {
           url = "https://api-anime-rouge.vercel.app/gogoanime/home";
         } else if (endpoint === "kickassanime") {
