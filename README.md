@@ -6,7 +6,7 @@
 </p>
 <br/><br/>
 
-Check it out at <a href="https://api-anime-rouge.vercel.app"><kbd>api-anime-rouge.vercel.app</kbd></a>.
+Check it out at <a href="https://api-anime-rouge.vercel.app"><kbd>api-anime-rouge.vercel.app</kbd></a> or the community-hosted mirror <a href="https://aninescraper.vercel.app"><kbd>aninescraper.vercel.app</kbd></a> by @cloudcompile.
 
 <break>
 
