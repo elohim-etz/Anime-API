@@ -280,7 +280,7 @@
               </select>
             </div>
             <div id="query-wrapper">
-              <label for="query">Search keyword (for AniWatch)</label>
+              <label for="query">Search keyword (AniWatch only)</label>
               <input id="query" name="query" placeholder="one piece" />
             </div>
             <div>
@@ -371,7 +371,7 @@
         } else if (endpoint === "gogoanime") {
           url = "https://api-anime-rouge.vercel.app/gogoanime/home";
         } else if (endpoint === "kickassanime") {
-          url = `https://api-anime-rouge.vercel.app/kickassanime/recent${page ? `?page=${encodeURIComponent(page)}` : ""}`;
+          url = `https://api-anime-rouge.vercel.app/kickassanime/recent${page ? `?page=${encodeURIComponent(pageValue)}` : ""}`;
         }
 
         try {
