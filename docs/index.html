@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anime API · Guide & Demos</title>
+    <style>
+      :root {
+        --bg: #0b0c10;
+        --panel: #11131a;
+        --accent: #8b5cf6;
+        --accent-2: #22d3ee;
+        --text: #f3f4f6;
+        --muted: #cbd5e1;
+        --border: #1f2937;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.08), transparent 25%),
+          radial-gradient(circle at 80% 0%, rgba(34, 211, 238, 0.08), transparent 25%),
+          var(--bg);
+        color: var(--text);
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        padding: 0 16px 72px;
+      }
+      header {
+        max-width: 1100px;
+        margin: 24px auto 12px;
+        padding: 20px 24px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(34, 211, 238, 0.08));
+        box-shadow: var(--shadow);
+      }
+      nav {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      nav a {
+        color: var(--text);
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+      }
+      nav a:hover {
+        border-color: rgba(139, 92, 246, 0.4);
+      }
+      .hero-title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 12px;
+        font-size: 32px;
+        letter-spacing: -0.02em;
+      }
+      .pill {
+        background: rgba(34, 211, 238, 0.14);
+        color: var(--text);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        border: 1px solid rgba(34, 211, 238, 0.4);
+      }
+      .subtitle {
+        color: var(--muted);
+        max-width: 740px;
+        margin: 0 0 12px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(139, 92, 246, 0.16);
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: var(--shadow);
+      }
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: none;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+      section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 22px;
+        letter-spacing: -0.01em;
+      }
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      code,
+      pre {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      code {
+        padding: 2px 6px;
+      }
+      pre {
+        padding: 12px;
+        overflow: auto;
+      }
+      .steps {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      .tag {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 12px;
+        margin-right: 6px;
+        background: rgba(139, 92, 246, 0.16);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+      }
+      form {
+        display: grid;
+        gap: 10px;
+      }
+      label {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+      }
+      .result {
+        min-height: 140px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.02);
+        overflow: auto;
+        font-family: "SFMono-Regular", "Consolas", "Roboto Mono", monospace;
+        white-space: pre-wrap;
+      }
+      .demo-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .small {
+        font-size: 13px;
+      }
+      .footer {
+        text-align: center;
+        color: var(--muted);
+        margin-top: 14px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="hero-title">
+        <span class="pill">GitHub Pages Frontend</span>
+        <span>Anime API · About & Playground</span>
+      </div>
+      <p class="subtitle">
+        A friendly landing page for the Anime API: learn what the project offers, explore endpoints, and try live
+        requests without leaving GitHub Pages.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="https://api-anime-rouge.vercel.app" target="_blank" rel="noopener noreferrer">View live API</a>
+        <a class="btn secondary" href="https://github.com/CloudCompile/Anime-API" target="_blank" rel="noopener noreferrer">Repository</a>
+      </div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#quickstart">How to use</a>
+        <a href="#playground">Live demo</a>
+        <a href="#demos">Examples</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="about">
+        <h2>About the project</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="tag">What</div>
+            <p class="muted">REST API that aggregates anime data from AniWatch, GoGoAnime, and KickAssAnime with caching.</p>
+          </div>
+          <div class="card">
+            <div class="tag">Why</div>
+            <p class="muted">Provide fast, scrape-backed endpoints for discovering shows, episodes, and streaming servers.</p>
+          </div>
+          <div class="card">
+            <div class="tag">How</div>
+            <p class="muted">Express + TypeScript backend, cached responses, ready to self-host (Docker/Vercel).</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="quickstart">
+        <h2>How to use the API</h2>
+        <div class="steps">
+          <div class="card">
+            <strong>1) Pick a route</strong>
+            <p class="muted">Example: <code>/aniwatch/search?keyword=one+piece&page=1</code></p>
+          </div>
+          <div class="card">
+            <strong>2) Call with fetch/cURL</strong>
+            <pre><code>curl https://api-anime-rouge.vercel.app/aniwatch/search?keyword=one+piece&page=1</code></pre>
+          </div>
+          <div class="card">
+            <strong>3) Parse the JSON</strong>
+            <p class="muted">You get titles, ids, episode counts, images, and pagination helpers.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="playground">
+        <h2>Live demo playground</h2>
+        <p class="muted small">
+          Run a quick query directly against the hosted API. Results stream below so you can copy/paste into your app.
+        </p>
+        <form id="demo-form">
+          <div class="grid">
+            <div>
+              <label for="endpoint">Endpoint</label>
+              <select id="endpoint" name="endpoint">
+                <option value="aniwatch">AniWatch search</option>
+                <option value="gogoanime">GoGoAnime home</option>
+                <option value="kickassanime">KickAssAnime recent</option>
+              </select>
+            </div>
+            <div id="query-wrapper">
+              <label for="query">Search keyword (AniWatch only)</label>
+              <input id="query" name="query" placeholder="one piece" />
+            </div>
+            <div>
+              <label for="page">Page (optional)</label>
+              <input id="page" name="page" placeholder="1" />
+            </div>
+          </div>
+          <button class="btn" type="submit">Run request</button>
+        </form>
+        <div class="result" id="result">Waiting for your first request…</div>
+      </section>
+
+      <section id="demos">
+        <h2>Ready-made examples</h2>
+        <div class="demo-grid">
+          <div class="card">
+            <strong>List spotlight shows</strong>
+            <p class="muted small">Fetch AniWatch home feed.</p>
+            <pre><code>fetch("https://api-anime-rouge.vercel.app/aniwatch/")
+  .then(r => r.json())
+  .then(data => console.log(data.spotlightAnimes));</code></pre>
+          </div>
+          <div class="card">
+            <strong>Find servers for an episode</strong>
+            <p class="muted small">Get streaming hosts for episode ids.</p>
+            <pre><code>curl "https://api-anime-rouge.vercel.app/aniwatch/servers?id=one-piece-100&ep=84802"</code></pre>
+          </div>
+          <div class="card">
+            <strong>KickAssAnime search</strong>
+            <p class="muted small">Lightweight listing with pagination.</p>
+            <pre><code>fetch("https://api-anime-rouge.vercel.app/kickassanime/search?keyword=naruto&page=1")
+  .then(r => r.json())
+  .then(({ animes }) => console.log(animes[0]));</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Helpful notes</h2>
+        <div class="grid">
+          <div class="card">
+            <strong>Caching</strong>
+            <p class="muted small">Key routes are cached (30 min to 1 month) to stay speedy and reduce scrape load.</p>
+          </div>
+          <div class="card">
+            <strong>Rate limits</strong>
+            <p class="muted small">Use sensible intervals; add your own proxy or cache when self-hosting.</p>
+          </div>
+          <div class="card">
+            <strong>Deploy</strong>
+            <p class="muted small">Fork → set environment if needed → <code>npm run build</code> → host on Vercel/Docker.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <p class="footer">
+      Built for the CloudCompile/Anime-API community. Need help? Open an issue on GitHub or reach out on the repo
+      discussions.
+    </p>
+
+    <script>
+      const MAX_KEYWORD_LENGTH = 120;
+      const form = document.getElementById("demo-form");
+      const resultEl = document.getElementById("result");
+      const endpointSelect = document.getElementById("endpoint");
+      const queryWrapper = document.getElementById("query-wrapper");
+      const queryInput = document.getElementById("query");
+      const pageInput = document.getElementById("page");
+
+      function updateFields() {
+        const val = endpointSelect.value;
+        queryWrapper.style.display = val === "aniwatch" ? "block" : "none";
+      }
+      endpointSelect.addEventListener("change", updateFields);
+      updateFields();
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        resultEl.textContent = "Loading…";
+        const endpoint = endpointSelect.value;
+        const page = pageInput.value.trim();
+        const pageNum = parseInt(page, 10);
+        if (page && (Number.isNaN(pageNum) || pageNum < 1)) {
+          resultEl.textContent = "Please enter a numeric page of 1 or greater.";
+          return;
+        }
+        const pageValue = page ? String(pageNum) : "1";
+
+        let url = "";
+        if (endpoint === "aniwatch") {
+          const q = queryInput.value.trim() || "one piece";
+          if (q.length > MAX_KEYWORD_LENGTH) {
+            resultEl.textContent = `Keyword too long (max ${MAX_KEYWORD_LENGTH} characters).`;
+            return;
+          }
+          url = `https://api-anime-rouge.vercel.app/aniwatch/search?keyword=${encodeURIComponent(q)}&page=${encodeURIComponent(pageValue)}`;
+        } else if (endpoint === "gogoanime") {
+          url = "https://api-anime-rouge.vercel.app/gogoanime/home";
+        } else if (endpoint === "kickassanime") {
+          const hasPage = page.length > 0;
+          const pageParam = hasPage ? `?page=${encodeURIComponent(pageValue)}` : "";
+          url = `https://api-anime-rouge.vercel.app/kickassanime/recent${pageParam}`;
+        }
+
+        try {
+          const res = await fetch(url);
+          if (!res.ok) {
+            resultEl.textContent = `Request failed with status ${res.status}`;
+            return;
+          }
+          const data = await res.json();
+          resultEl.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          console.error(err);
+          resultEl.textContent = "Request failed. Please try again or check the console for details.";
+        }
+      });
+    </script>
+  </body>
+</html>
