@@ -1,10 +1,27 @@
 import axios, { AxiosError } from "axios";
 import { URL_fn } from "../../utils/kickassanime/constants";
 import { mapStatus } from "../../utils/kickassanime/helpers";
+import { puppeteerGet } from "../../utils/kickassanime/browser";
 import { headers } from "../../config/headers";
 import createHttpError, { HttpError } from "http-errors";
 import { ScrapedAboutPage } from "../../types/kickassanime/about";
 import { Episode } from "../../types/kickassanime/anime";
+
+/**
+ * Helper function to fetch data with axios, falling back to Puppeteer
+ */
+const fetchWithFallback = async (url: string, requestHeaders: any): Promise<any> => {
+  try {
+    const response = await axios.get(url, {
+      headers: requestHeaders,
+      timeout: 10000,
+    });
+    return response.data;
+  } catch (axiosErr) {
+    console.log("Axios failed, trying Puppeteer for:", url);
+    return await puppeteerGet(url);
+  }
+};
 
 export const scrapeAboutPage = async (
   id: string
@@ -20,23 +37,15 @@ export const scrapeAboutPage = async (
     };
 
     // Get anime info
-    const infoResponse = await axios.get(`${URLs.SHOW}/${id}`, {
-      headers: requestHeaders,
-      timeout: 10000,
-    });
-
-    const animeData = infoResponse.data;
+    const animeData = await fetchWithFallback(`${URLs.SHOW}/${id}`, requestHeaders);
 
     // Get episodes
-    const episodesResponse = await axios.get(
+    const episodesData = await fetchWithFallback(
       `${URLs.SHOW}/${id}/episodes?page=1&lang=ja-JP`,
-      {
-        headers: requestHeaders,
-        timeout: 10000,
-      }
+      requestHeaders
     );
 
-    const episodes: Episode[] = episodesResponse.data.result.map((ep: any) => ({
+    const episodes: Episode[] = episodesData.result.map((ep: any) => ({
       id: `${id}/episode/ep-${Math.floor(ep.episode_number)}-${ep.slug}`,
       title: ep.title || null,
       number: Math.floor(ep.episode_number),

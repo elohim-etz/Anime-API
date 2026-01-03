@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { URL_fn } from "../../utils/kickassanime/constants";
+import { puppeteerGet } from "../../utils/kickassanime/browser";
 import { headers } from "../../config/headers";
 import createHttpError, { HttpError } from "http-errors";
 import { ScrapedRecentPage } from "../../types/kickassanime/recent";
@@ -18,17 +19,24 @@ export const scrapeRecentPage = async (
   try {
     const URLs = await URL_fn();
 
-    const response = await axios.get(`${URLs.RECENT}?page=${page}`, {
-      headers: {
-        "User-Agent": headers.USER_AGENT_HEADER,
-        "Accept-Encoding": headers.ACCEPT_ENCODEING_HEADER,
-        Accept: "application/json, text/plain, */*",
-        Host: new URL(URLs.BASE).host,
-      },
-      timeout: 10000,
-    });
+    let responseData: any;
+    try {
+      const response = await axios.get(`${URLs.RECENT}?page=${page}`, {
+        headers: {
+          "User-Agent": headers.USER_AGENT_HEADER,
+          "Accept-Encoding": headers.ACCEPT_ENCODEING_HEADER,
+          Accept: "application/json, text/plain, */*",
+          Host: new URL(URLs.BASE).host,
+        },
+        timeout: 10000,
+      });
+      responseData = response.data;
+    } catch (axiosErr) {
+      console.log("Axios failed, trying Puppeteer for recent...");
+      responseData = await puppeteerGet(`${URLs.RECENT}?page=${page}`);
+    }
 
-    const recentAnimes: RecentAnime[] = response.data.result.map(
+    const recentAnimes: RecentAnime[] = responseData.result.map(
       (anime: any) => {
         const imgUrl = anime.poster
           ? `${URLs.IMAGE}/${anime.poster.hq}.${anime.poster.formats[0]}`
@@ -48,8 +56,8 @@ export const scrapeRecentPage = async (
     );
 
     res.animes = recentAnimes;
-    res.hasNextPage = page < (response.data.maxPage || 1);
-    res.totalPages = response.data.maxPage || 1;
+    res.hasNextPage = page < (responseData.maxPage || 1);
+    res.totalPages = responseData.maxPage || 1;
 
     return res;
   } catch (err) {

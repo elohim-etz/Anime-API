@@ -31,6 +31,7 @@
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
     "http-errors": "^2.0.0",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "puppeteer": "^24.34.0"
   }
 }

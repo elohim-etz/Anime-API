@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { URL_fn } from "../../utils/kickassanime/constants";
+import { puppeteerGet } from "../../utils/kickassanime/browser";
 import { headers } from "../../config/headers";
 import createHttpError, { HttpError } from "http-errors";
 import { ScrapedEpisodePage } from "../../types/kickassanime/about";
@@ -20,12 +21,19 @@ export const scrapeEpisodeServers = async (
 
     const episodeUrl = `${URLs.SHOW}/${episodeId}`;
 
-    const response = await axios.get(episodeUrl, {
-      headers: requestHeaders,
-      timeout: 10000,
-    });
+    let responseData: any;
+    try {
+      const response = await axios.get(episodeUrl, {
+        headers: requestHeaders,
+        timeout: 10000,
+      });
+      responseData = response.data;
+    } catch (axiosErr) {
+      console.log("Axios failed, trying Puppeteer for servers...");
+      responseData = await puppeteerGet(episodeUrl);
+    }
 
-    const servers: EpisodeServer[] = (response.data.servers || []).map(
+    const servers: EpisodeServer[] = (responseData.servers || []).map(
       (server: any) => ({
         name: server.name,
         url: server.src,
